@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "leds.h"													/* Leds functions for FRDM46-KL46 */
 
 int16_t acc_X=0, acc_Y=0, acc_Z=0;
 
@@ -43,11 +43,47 @@ int init_mma()
 		//else error
 		return 0;
 }
+void read_full_x()
+{
+	//Delay(1);
+
+	uint8_t data[2];
+//	Delay(100);
+
+	data[0] = i2c_read_byte(MMA_ADDR, REG_XHI);
+	Delay(100);
+	data[1] = i2c_read_byte(MMA_ADDR, REG_XLO);
+
+	acc_X = (((int16_t)data[0])<<8) | data[1];
+	acc_X/=4;
+}
+void showX()
+{
+	char temp[8];	
+	read_full_x();
+	sprintf(temp, "%d", acc_X);
+	transmitString(&temp[0]);
+if(acc_X > 500)
+	{
+		PTB->PSOR = led_mask[ledGreen];	
+		PTB->PCOR = led_mask[ledRed];	
+	}
+	else if(acc_X < -500)
+	{
+		PTB->PCOR = led_mask[ledGreen];	
+		PTB->PSOR = led_mask[ledRed];	
+	}
+	else
+	{
+		PTB->PSOR = led_mask[ledGreen];	
+		PTB->PSOR = led_mask[ledRed];	
+	}
+}
 void read_full_xyz()
 {
 	//Delay(1);
 	int i;
-	uint8_t data[6];
+	int8_t data[6];
 	Delay(100);
 	i2c_read_setup(MMA_ADDR , REG_XHI);
 	
@@ -88,10 +124,10 @@ void showAcceleration(void)
 		sprintf(strx, "%d", get_acc_X());
 		sprintf(stry, "%d", get_acc_Y());
 		sprintf(strz, "%d", get_acc_Z());
-		while (!(UART0->S1 & UART0_S1_TDRE_MASK));
+		//while (!(UART0->S1 & UART0_S1_TDRE_MASK));
 		transmitString(&strx[0]);
-		while (!(UART0->S1 & UART0_S1_TDRE_MASK));
+		//while (!(UART0->S1 & UART0_S1_TDRE_MASK));
 		transmitString(&stry[0]);
-		while (!(UART0->S1 & UART0_S1_TDRE_MASK));
+		//while (!(UART0->S1 & UART0_S1_TDRE_MASK));
 		transmitString(&strz[0]);
 }

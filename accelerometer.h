@@ -18,7 +18,7 @@
 int init_mma(void);
 void read_full_xyz(void);
 void read_xyz(void);
-
+void read_full_x(void);
 extern int16_t acc_X, acc_Y, acc_Z;
 void Delay (uint32_t dly);
 
@@ -26,3 +26,4 @@ int16_t get_acc_X(void);
 int16_t get_acc_Y(void);
 int16_t get_acc_Z(void);
 void showAcceleration(void);
+void showX(void);

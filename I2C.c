@@ -2,6 +2,7 @@
 #include "I2C.h"													/* Leds functions for FRDM46-KL46 */
 #include <stdio.h>
 #include <string.h>
+#include "accelerometer.h"
 
 #define I2C_M_START I2C0->C1 |= I2C_C1_MST_MASK
 #define I2C_M_STOP I2C0->C1 &= ~I2C_C1_MST_MASK
@@ -21,7 +22,7 @@ void i2c_start()
 }
  void I2CInitialization()
 {
-
+	uint8_t temp;
 	SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK;
   SIM->SCGC5 |= (SIM_SCGC5_PORTB_MASK);
 
@@ -33,7 +34,7 @@ void i2c_start()
 	//	ICR = 14 => SCL = 56		mul = 4
 	//	set to 93,75k baud
 
- 	I2C0->F = (I2C_F_ICR(34) | I2C_F_MULT(2));
+ 	I2C0->F = (I2C_F_ICR(14));
 		
 	//enable i2c and set to master mode
 	I2C0->C1 |= (I2C_C1_IICEN_MASK);
@@ -42,21 +43,22 @@ void i2c_start()
 	// Select high drive mode
 	I2C0->C2 |= (I2C_C2_HDRS_MASK);
 
-	
-	
 	//		I2C0->S |= I2C_S_IICIF_MASK;
 	//I2C0->F = (I2C_F_ICR(0x12) | I2C_F_MULT(0));
 	//enable i2c and set to master mode
 	//I2C0 -> C1 |= I2C_C1_IICEN_MASK;
-	//I2C0->C2 |= (I2C_C2_HDRS_MASK);
+	//I2C0->C2 |= (I2C_C2_HDRS_MASK);	
+	//temp = i2c_read_byte(MMA_ADDR, REG_CTRL1);
+	//temp = temp | 1;
+	i2c_write_byte(MMA_ADDR, REG_CTRL1, 1);
 }  
 
 
 void i2c_wait(void) {
 	while((I2C0->S & I2C_S_IICIF_MASK)==0) {
 	} 
-  I2C0->FLT |=I2C_FLT_STOPF_MASK;
-	I2C0->S |= I2C_S_IICIF_MASK;
+  I2C0->S |=I2C_S_IICIF_MASK;
+	//I2C0->FLT |=I2C_FLT_STOPF_MASK;
 	//Delay(1);
 }
 
