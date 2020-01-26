@@ -21,8 +21,6 @@ const static uint32_t led_mask[] = {1UL << 8, 1UL << 9, 1UL << 10};  //Green led
 
 void ledsInitialize(void);
 
-void ledgreenBlink(uint32_t x, uint32_t y);
-void ledredBlink(uint32_t x, uint32_t y);
 void ledsOff (void);
 void ledsOn (void);
 

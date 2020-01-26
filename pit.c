@@ -25,13 +25,9 @@ void PitInitialize(void)
 	
 	// set load value
 	PIT->CHANNEL[0].LDVAL = PIT_LDVAL_TSV(0x00040000);
-	//drugi kanal:
-	//PIT->CHANNEL[1].LDVAL = PIT_LDVAL_TSV(0x00100000);
-	
 	
 	// interrupt enable
 	PIT->CHANNEL[0].TCTRL |=PIT_TCTRL_TIE_MASK;	
-	//PIT->CHANNEL[1].TCTRL |=PIT_TCTRL_TIE_MASK;	
 	
 	//set priority and clear pending interrupts   1.9
 	NVIC_SetPriority(PIT_IRQn,2);
@@ -41,7 +37,6 @@ void PitInitialize(void)
 
 	// start counting
 		PIT->CHANNEL[0].TCTRL |= PIT_TCTRL_TEN_MASK;
-		//PIT->CHANNEL[1].TCTRL |= PIT_TCTRL_TEN_MASK;
 }
 
 void PIT_IRQHandler()
@@ -51,16 +46,15 @@ void PIT_IRQHandler()
 	{
 		//clearing status flag for this channel:
 		PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK;
-		//PTB->PTOR = led_mask[ledGreen];
-		//PTB->PTOR = led_mask[ledRed];	
 		accel = 1;
 	}
 }
+// CHECKING IF INTERRUPT OCCURS
 int8_t get_accel()
 {
 	return accel;
 }
-
+// Clearing interrupt flag
 void clear_accel()
 {
 	accel = 0;

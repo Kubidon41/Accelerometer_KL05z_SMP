@@ -12,18 +12,13 @@
 #define REG_WHOAMI 0x0D
 #define REG_CTRL1  0x2A
 #define REG_CTRL4  0x2D
-
+#define XYZ_DATA_CFG 0x0E
 #define WHOAMI 0x1A
 
-int init_mma(void);
-void read_full_xyz(void);
-void read_xyz(void);
 void read_full_x(void);
-extern int16_t acc_X, acc_Y, acc_Z;
+extern int16_t acc_X;
 void Delay (uint32_t dly);
 
 int16_t get_acc_X(void);
-int16_t get_acc_Y(void);
-int16_t get_acc_Z(void);
-void showAcceleration(void);
+
 void showX(void);

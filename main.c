@@ -6,37 +6,27 @@
 #include "pit.h"
 #include "accelerometer.h"
 #include <stdio.h>
-
 #include <stdlib.h>
 
 int main()
 {
-
+	// I N I T I A L I Z A T I O N
 	ledsInitialize();
 	PitInitialize();
 	uartInitialization();
-	uartTest();
-	//TPMInitialize();
 	I2CInitialization();
-	//init_mma();
-	//i2c_read_setup(MMA_ADDR, REG_WHOAMI);
+	
 	Delay(100);
 	while(1)
 	{
+		// CHECKING IF INTERRUPT OCCURS
 		if (get_accel() ==1)
 		{
-			showX();
+			// Sendding full 16-bit X accelerations by UART and switching suitable led on.
+			showX();	// 
+			// Clearing interrupt flag
 			clear_accel();
 		}
-		//i2c_read_byte(MMA_ADDR, REG_WHOAMI);
-		//showAcceleration();
-		//int8_t t;
-		//read_full_x();
-		//t = i2c_read_byte(MMA_ADDR, REG_XHI);
-		//sprintf(temp, "%d", t);
-		//sprintf(temp, "%d", get_acc_X());
-		//transmitString(&temp[0]);
-		//Delay(1000);
 	}
 
 }
